@@ -13,13 +13,14 @@ docker-compose up -d db
 then start with mvn command:
 
 ```shell script
-mvnw compile quarkus:dev
+mvnw compile quarkus:dev -Dquarkus.profile=dev
 ```
 
 Then go 
 
 http://localhost:8080/hello
 http://localhost:8080/hello/greeting/type_your_name_here
+http://localhost:8080/fruits/
 
 ## Testing
 
