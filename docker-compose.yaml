@@ -7,9 +7,11 @@ services:
     image: registry.balcia.com/balcia_dev/java/quarkus-ws
     ports:
       - '8080:8080'
-      - '8081:8081'
-      - '8443:8443'
-
+      - '8778:8778'
+      - '9779:9779'
+    environment:
+      - POSTGRES_PASSWORD=postgres_234
+      - QUARKUS_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
   db:
     image: postgres:9.6-alpine
     ports:

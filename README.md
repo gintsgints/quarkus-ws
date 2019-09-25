@@ -36,3 +36,9 @@ Docker image is build with command:
 ```shell script
 docker build -t registry.balcia.com/balcia_dev/java/quarkus-ws .
 ```
+
+then you start whole project by docker compose:
+
+```shell script
+docker-compose up -d
+```
