@@ -19,3 +19,20 @@ mvnw compile quarkus:dev
 Then go 
 
 http://localhost:8080/hello
+http://localhost:8080/hello/greeting/type_your_name_here
+
+## Testing
+
+To test project you execute:
+
+```shell script
+mvnw test
+```
+
+## Building docker image
+
+Docker image is build with command:
+
+```shell script
+docker build -t registry.balcia.com/balcia_dev/java/quarkus-ws .
+```

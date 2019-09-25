@@ -3,14 +3,16 @@ package com.balcia.ws;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 
+import java.util.UUID;
+
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
 
 @QuarkusTest
-public class ExampleResourceTest {
+class ExampleResourceTest {
 
     @Test
-    public void testHelloEndpoint() {
+    void testHelloEndpoint() {
         given()
           .when().get("/hello")
           .then()
@@ -18,4 +20,14 @@ public class ExampleResourceTest {
              .body(is("hello"));
     }
 
+    @Test
+    void testGreetingEndpoint() {
+        String uuid = UUID.randomUUID().toString();
+        given()
+                .pathParam("name", uuid)
+                .when().get("/hello/greeting/{name}")
+                .then()
+                .statusCode(200)
+                .body(is("hello " + uuid + "\n"));
+    }
 }
