@@ -1,16 +1,20 @@
-## Stage 1 : build with maven builder image with native capabilities
-FROM quay.io/quarkus/centos-quarkus-maven:19.1.1 AS build
-COPY src /usr/src/app/src
-COPY pom.xml /usr/src/app
-USER root
-RUN chown -R quarkus /usr/src/app
-USER quarkus
-RUN mvn -f /usr/src/app/pom.xml -Pnative clean package
+FROM openjdk:8u222 AS build
+WORKDIR /usr/local/app
 
-## Stage 2 : create the docker final image
-FROM registry.access.redhat.com/ubi8/ubi-minimal
-WORKDIR /work/
-COPY --from=build /usr/src/app/target/*-runner /work/application
-RUN chmod 775 /work
+COPY . .
+
+RUN ./mvnw clean package -Dmaven.test.skip=true
+
+FROM fabric8/java-alpine-openjdk8-jre AS release
+ENV JAVA_OPTIONS="-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager"
+ENV AB_ENABLED=jmx_exporter
+
+COPY target/lib/* /deployments/lib/
+COPY target/*-runner.jar /deployments/app.jar
+
+HEALTHCHECK --interval=1m --timeout=3s --start-period=15s \
+  CMD wget -qO- http://localhost:8080 &> /dev/null || exit 1
+
 EXPOSE 8080
-CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]
+
+ENTRYPOINT [ "/deployments/run-java.sh" ]
