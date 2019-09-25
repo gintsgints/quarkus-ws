@@ -1,28 +1,16 @@
+## Stage 1 : build with maven builder image with native capabilities
 FROM quay.io/quarkus/centos-quarkus-maven:19.1.1 AS build
-WORKDIR /usr/local/app
+COPY src /usr/src/app/src
+COPY pom.xml /usr/src/app
+USER root
+RUN chown -R quarkus /usr/src/app
+USER quarkus
+RUN mvn -f /usr/src/app/pom.xml -Pnative clean package
 
-COPY . /usr/local/app
-RUN ./mvnw -Pnative clean package
-
-FROM registry.access.redhat.com/ubi8/ubi-minimal AS release
-WORKDIR /usr/local/app
-
-LABEL maintainer="Gints Polis <gints.polis@balcia.com>"
-LABEL description="REST API application"
-
-RUN groupadd -r app && useradd -r -gapp app
-RUN mkdir -m 0755 -p /usr/local/app/bin
-RUN mkdir -m 0755 -p /usr/local/app/config
-RUN mkdir -m 0755 -p /usr/local/app/logs/
-
-COPY --from=build /usr/src/app/target/*-runner /usr/local/app/application
-
-RUN chown -R app:app /usr/local/app
-
+## Stage 2 : create the docker final image
+FROM registry.access.redhat.com/ubi8/ubi-minimal
+WORKDIR /work/
+COPY --from=build /usr/src/app/target/*-runner /work/application
+RUN chmod 775 /work
 EXPOSE 8080
-
-HEALTHCHECK --interval=1m --timeout=3s --start-period=15s \
-  CMD wget -qO- http://localhost:8080 &> /dev/null || exit 1
-
 CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]
-
