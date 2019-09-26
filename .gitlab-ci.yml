@@ -1,0 +1,52 @@
+stages:
+  - test
+  - publish
+  - build
+
+test:
+  stage: test
+  image: openjdk:8u222
+  variables:
+    POSTGRES_PASSWORD: "postgres_234"
+  services:
+    - name: postgres:9.6
+      alias: db
+  script:
+    - ./mvnw test
+  except:
+    - tags
+  artifacts:
+    reports:
+      junit:
+        - target/surefire-reports/TEST-*.xml
+        - target/failsafe-reports/TEST-*.xml
+
+build:
+  stage: build
+  image: docker:stable
+  variables:
+    DOCKER_HOST: tcp://localhost:2375
+    DOCKER_DRIVER: overlay2
+  services:
+    - docker:18.09-dind
+  script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+    - docker build -t $CI_REGISTRY_IMAGE .
+    - docker push $CI_REGISTRY_IMAGE
+  except:
+    - tags
+
+build:ver:
+  stage: build
+  image: docker:stable
+  variables:
+    DOCKER_HOST: tcp://localhost:2375
+    DOCKER_DRIVER: overlay2
+  services:
+    - docker:18.09-dind
+  script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+    - docker build -t $CI_REGISTRY_IMAGE:$CI_BUILD_TAG .
+    - docker push $CI_REGISTRY_IMAGE:$CI_BUILD_TAG
+  only:
+    - tags
