@@ -1,7 +1,7 @@
 stages:
   - test
-  - publish
   - build
+  - deploy
 
 test:
   stage: test
