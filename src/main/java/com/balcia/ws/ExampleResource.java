@@ -1,5 +1,6 @@
 package com.balcia.ws;
 
+import com.balcia.ws.greeting.Greeting;
 import com.balcia.ws.greeting.GreetingService;
 
 import javax.inject.Inject;
@@ -16,9 +17,9 @@ public class ExampleResource {
     GreetingService service;
 
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("/greeting/{name}")
-    public String greeting(@PathParam("name") String name) {
+    public Greeting greeting(@PathParam("name") String name) {
         return service.greeting(name);
     }
 

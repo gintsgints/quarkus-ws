@@ -5,8 +5,8 @@ import javax.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class GreetingService {
 
-    public String greeting(String name) {
-        return "hello " + name + "\n";
+    public Greeting greeting(String name) {
+        return new Greeting("hello " + name + "\n");
     }
 
 }
