@@ -1,0 +1,39 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\Development\exec\cmd\kompose.exe --file docker-compose.yaml convert
+    kompose.version: 1.18.0 (06a2e56)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: server
+  name: server
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: server
+    spec:
+      imagePullSecrets:
+        - name: quarkusws
+      containers:
+      - env:
+        - name: POSTGRES_PASSWORD
+          value: postgres_234
+        - name: QUARKUS_DATASOURCE_URL
+          value: jdbc:postgresql://db:5432/postgres
+        - name: QUARKUS_PROFILE
+          value: dev
+        image: registry.balcia.com/balcia_dev/java/quarkus-ws
+        imagePullPolicy: Always
+        name: server
+        ports:
+        - containerPort: 8080
+        - containerPort: 8778
+        - containerPort: 9779
+        resources: {}
+      restartPolicy: Always
+status: {}

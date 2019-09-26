@@ -52,3 +52,23 @@ build:ver:
     - docker push $CI_REGISTRY_IMAGE:$CI_BUILD_TAG
   only:
     - tags
+
+deploy:
+  stage: deploy
+  image: gintsgints/helm-kubectl-docker
+  variables:
+    KUBECONFIG: /etc/deploy/config
+    KUBE_NAMESPACE: develop
+  before_script:
+    - mkdir -p /etc/deploy
+    - echo ${kube_config} | base64 -d > ${KUBECONFIG}
+  script:
+    - kubectl apply --namespace "$KUBE_NAMESPACE" -f ./k8s/db-deployment.yaml
+    - kubectl apply --namespace "$KUBE_NAMESPACE" -f ./k8s/db-service.yaml
+    - kubectl apply --namespace "$KUBE_NAMESPACE" -f ./k8s/server-deployment.yaml
+    - kubectl apply --namespace "$KUBE_NAMESPACE" -f ./k8s/server-service.yaml
+  environment:
+    name: develop
+    url: http://ws.dev.balcia.com
+  except:
+    - tags
