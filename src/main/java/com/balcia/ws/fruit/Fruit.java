@@ -38,7 +38,7 @@ public class Fruit {
         this.name = name;
     }
 
-    Integer getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -46,11 +46,11 @@ public class Fruit {
         this.id = id;
     }
 
-    String getName() {
+    public String getName() {
         return name;
     }
 
-    void setName(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 }
