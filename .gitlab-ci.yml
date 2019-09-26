@@ -12,7 +12,7 @@ test:
     - name: postgres:9.6
       alias: db
   script:
-    - ./mvnw test
+    - ./mvnw test -Dquarkus.profile=test
   except:
     - tags
   artifacts:
@@ -69,6 +69,6 @@ deploy:
     - kubectl apply --namespace "$KUBE_NAMESPACE" -f ./k8s/server-service.yaml
   environment:
     name: develop
-    url: http://ws.dev.balcia.com
+    url: http://10.203.8.21:30310
   except:
     - tags
