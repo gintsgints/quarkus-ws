@@ -33,6 +33,10 @@ http://localhost:8080/hello
 http://localhost:8080/hello/greeting/type_your_name_here
 http://localhost:8080/fruits/
 
+Also you can check swagger here:
+
+http://localhost:8080/swagger-ui
+
 Some test commands:
 
 ```shell script
