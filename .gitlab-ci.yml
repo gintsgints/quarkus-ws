@@ -12,7 +12,7 @@ test:
     - name: postgres:9.6
       alias: db
   script:
-    - ./mvnw test -Dquarkus.profile=test
+    - ./mvnw clean test -Dquarkus.profile=test
   except:
     - tags
   artifacts:

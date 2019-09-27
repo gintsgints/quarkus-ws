@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 
 @QuarkusTest
@@ -22,14 +23,14 @@ class ExampleResourceTest {
 
     // TODO: finish tests with JSON checking.
 
-//    @Test
-//    void testGreetingEndpoint() {
-//        String uuid = UUID.randomUUID().toString();
-//        given()
-//                .pathParam("name", uuid)
-//                .when().get("/hello/greeting/{name}")
-//                .then()
-//                .statusCode(200)
-//                .body(is("{\"message\":""hello " + uuid + "\n}"));
-//    }
+    @Test
+    void testGreetingEndpoint() {
+        String uuid = UUID.randomUUID().toString();
+        given()
+                .pathParam("name", uuid)
+                .when().get("/hello/greeting/{name}")
+                .then()
+                .statusCode(200)
+                .body(containsString("hello " + uuid));
+    }
 }
