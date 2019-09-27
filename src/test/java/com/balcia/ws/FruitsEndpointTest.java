@@ -3,6 +3,8 @@ package com.balcia.ws;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.core.IsNot.not;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 
 import org.junit.jupiter.api.Test;
 
@@ -22,6 +24,14 @@ public class FruitsEndpointTest {
                         containsString("Apple"),
                         containsString("Banana")
                 );
+
+        //List all, should have all 3 fruits with correct names:
+        given()
+                .when().get("/fruits")
+                .then()
+                .statusCode(200)
+                .body("$.size()", is(3),
+                        "name", containsInAnyOrder("Cherry", "Apple", "Banana"));
 
         //Delete the Cherry:
         given()
