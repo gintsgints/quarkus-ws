@@ -1,0 +1,25 @@
+{
+  "realm": "quarkus",
+  "auth-server-url": "http://wsexample.dev.balcia.com:30310/auth",
+  "resource": "backend-service",
+  "bearer-only" : true,
+  "credentials": {
+    "secret": "secret"
+  },
+  "policy-enforcer": {
+    "enforcement-mode": "PERMISSIVE",
+    "paths": [{
+      "path":"/openapi",
+      "enforcement-mode":"DISABLED"
+    },{
+      "path":"/hello",
+      "enforcement-mode":"DISABLED"
+    },{
+      "path":"/hello/greeting/*",
+      "enforcement-mode":"DISABLED"
+    },{
+      "path":"/fruits/*",
+      "enforcement-mode":"DISABLED"
+    }]
+  }
+}
