@@ -8,9 +8,15 @@ test:
   image: openjdk:8u222
   variables:
     POSTGRES_PASSWORD: "postgres_234"
+    KEYCLOAK_USER: "admin"
+    KEYCLOAK_PASSWORD: "admin_234"
+    KEYCLOAK_SERVER: "keycloak:8080"
+    KEYCLOAK_IMPORT: "/tmp/balcia-realm.json"
   services:
     - name: postgres:9.6
       alias: db
+    - name: registry.balcia.com/balcia_dev/testing/keycloak-image
+      alias: keycloak
   script:
     - ./mvnw clean test -Dquarkus.profile=test
   except:

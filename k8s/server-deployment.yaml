@@ -29,6 +29,8 @@ spec:
           value: jdbc:postgresql://db:5432/postgres
         - name: QUARKUS_PROFILE
           value: dev
+        - name: KEYCLOAK_SERVER
+          value: wsexample.dev.balcia.com:30310
         image: registry.balcia.com/balcia_dev/java/quarkus-ws
         imagePullPolicy: Always
         name: server

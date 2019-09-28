@@ -1,6 +1,6 @@
 {
-  "realm": "quarkus",
-  "auth-server-url": "http://wsexample.dev.balcia.com:30310/auth",
+  "realm": "balcia-test",
+  "auth-server-url": "http://${env.KEYCLOAK_SERVER}/auth",
   "resource": "backend-service",
   "bearer-only" : true,
   "credentials": {
