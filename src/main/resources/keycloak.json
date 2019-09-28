@@ -3,6 +3,7 @@
   "auth-server-url": "http://${env.KEYCLOAK_SERVER}/auth",
   "resource": "backend-service",
   "bearer-only" : true,
+  "enable-cors" : true,
   "credentials": {
     "secret": "secret"
   },
