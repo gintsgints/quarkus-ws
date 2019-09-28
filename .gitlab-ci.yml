@@ -10,7 +10,7 @@ test:
     POSTGRES_PASSWORD: "postgres_234"
     KEYCLOAK_USER: "admin"
     KEYCLOAK_PASSWORD: "admin_234"
-    KEYCLOAK_SERVER: "keycloak:8080"
+    KEYCLOAK_SERVER: "localhost:8080"
     KEYCLOAK_IMPORT: "/tmp/balcia-realm.json"
   services:
     - name: postgres:9.6
