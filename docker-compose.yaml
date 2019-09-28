@@ -13,6 +13,15 @@ services:
       - POSTGRES_PASSWORD=postgres_234
       - QUARKUS_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
       - QUARKUS_PROFILE=dev
+
+  keycloak:
+    image: jboss/keycloak
+    environment:
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=admin_234
+    ports:
+      - '8180:8080'
+
   db:
     image: postgres:9.6-alpine
     ports:
