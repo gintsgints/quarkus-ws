@@ -1,0 +1,15 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: keycloak
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  rules:
+    - host: wsexample.dev.balcia.com
+      http:
+        paths:
+          - path: /auth
+            backend:
+              serviceName: keycloak
+              servicePort: 8180
