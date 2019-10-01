@@ -69,7 +69,7 @@ deploy:
     - mkdir -p /etc/deploy
     - echo ${kube_config} | base64 -d > ${KUBECONFIG}
   script:
-    - kubectl delete deployment -l name=server
+    - kubectl delete deployment -l io.kompose.service=server
     - kubectl apply --namespace "$KUBE_NAMESPACE" -f ./k8s/db-deployment.yaml
     - kubectl apply --namespace "$KUBE_NAMESPACE" -f ./k8s/db-service.yaml
     - kubectl apply --namespace "$KUBE_NAMESPACE" -f ./k8s/server-deployment.yaml
