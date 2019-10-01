@@ -2,25 +2,34 @@
   "realm": "balcia-test",
   "auth-server-url": "http://${env.KEYCLOAK_SERVER}/auth",
   "resource": "backend-service",
-  "bearer-only" : true,
-  "enable-cors" : true,
+  "bearer-only": true,
+  "enable-cors": true,
   "credentials": {
     "secret": "secret"
   },
   "policy-enforcer": {
     "enforcement-mode": "PERMISSIVE",
-    "paths": [{
-      "path":"/openapi",
-      "enforcement-mode":"DISABLED"
-    },{
-      "path":"/hello",
-      "enforcement-mode":"DISABLED"
-    },{
-      "path":"/hello/greeting/*",
-      "enforcement-mode":"DISABLED"
-    },{
-      "path":"/fruits/*",
-      "enforcement-mode":"DISABLED"
-    }]
+    "paths": [
+      {
+        "path": "/openapi",
+        "enforcement-mode": "DISABLED"
+      },
+      {
+        "path": "/swagger-ui",
+        "enforcement-mode": "DISABLED"
+      },
+      {
+        "path": "/hello",
+        "enforcement-mode": "DISABLED"
+      },
+      {
+        "path": "/hello/greeting/*",
+        "enforcement-mode": "DISABLED"
+      },
+      {
+        "path": "/fruits/*",
+        "enforcement-mode": "DISABLED"
+      }
+    ]
   }
 }
