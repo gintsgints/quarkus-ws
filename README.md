@@ -53,23 +53,6 @@ curl -X POST "http://wsexample.dev.balcia.com:30310/fruits" -H "accept: applicat
 curl -X GET "http://wsexample.dev.balcia.com:30310/fruits/{id_you_got_form_previous}" -H "accept: application/json"
 ```
 
-To test secured endpoints:
-
-```shell script
-# Get token from keycloak server (you have to have jq app at your path https://stedolan.github.io/jq/
-# alice normal user
-export access_token=$(\
-    curl -X POST http://localhost:8180/auth/realms/balcia-test/protocol/openid-connect/token \
-    --user backend-service:secret \
-    -H 'content-type: application/x-www-form-urlencoded' \
-    -d 'username=alice&password=alice&grant_type=password' | ./jq --raw-output '.access_token' \
- )
-# Check token
-echo $access_token
-# Access different points
-
-```
-
 ## Testing
 
 To test project you execute:
