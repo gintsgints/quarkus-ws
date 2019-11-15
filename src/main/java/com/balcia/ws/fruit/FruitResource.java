@@ -1,5 +1,7 @@
 package com.balcia.ws.fruit;
 
+import io.quarkus.panache.common.Sort;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.json.Json;
@@ -9,6 +11,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
+import java.util.List;
 
 @Path("fruits")
 @ApplicationScoped
@@ -16,19 +19,15 @@ import javax.ws.rs.ext.Provider;
 @Consumes("application/json")
 public class FruitResource {
 
-    @Inject
-    EntityManager entityManager;
-
     @GET
-    public Fruit[] get() {
-        return entityManager.createNamedQuery("Fruits.findAll", Fruit.class)
-                .getResultList().toArray(new Fruit[0]);
+    public List<Fruit> get() {
+        return Fruit.listAll(Sort.by("name"));
     }
 
     @GET
     @Path("{id}")
-    public Fruit getSingle(@PathParam("id") Integer id) {
-        Fruit entity = entityManager.find(Fruit.class, id);
+    public Fruit getSingle(@PathParam("id") Long id) {
+        Fruit entity = Fruit.findById(id);
         if (entity == null) {
             throw new WebApplicationException("Fruit with id of " + id + " does not exist.", 404);
         }
@@ -38,29 +37,29 @@ public class FruitResource {
     @POST
     @Transactional
     public Response create(Fruit fruit) {
-        if (fruit.getId() != null) {
+        if (fruit.id != null) {
             throw new WebApplicationException("Id was invalidly set on request.", 422);
         }
 
-        entityManager.persist(fruit);
+        fruit.persist();
         return Response.ok(fruit).status(201).build();
     }
 
     @PUT
     @Path("{id}")
     @Transactional
-    public Fruit update(@PathParam("id") Integer id, Fruit fruit) {
-        if (fruit.getName() == null) {
+    public Fruit update(@PathParam("id") Long id, Fruit fruit) {
+        if (fruit.name == null) {
             throw new WebApplicationException("Fruit Name was not set on request.", 422);
         }
 
-        Fruit entity = entityManager.find(Fruit.class, id);
+        Fruit entity = Fruit.findById(id);
 
         if (entity == null) {
             throw new WebApplicationException("Fruit with id of " + id + " does not exist.", 404);
         }
 
-        entity.setName(fruit.getName());
+        entity.name = fruit.name;
 
         return entity;
     }
@@ -68,12 +67,12 @@ public class FruitResource {
     @DELETE
     @Path("{id}")
     @Transactional
-    public Response delete(@PathParam("id") Integer id) {
-        Fruit entity = entityManager.getReference(Fruit.class, id);
+    public Response delete(@PathParam("id") Long id) {
+        Fruit entity = Fruit.findById(id);
         if (entity == null) {
             throw new WebApplicationException("Fruit with id of " + id + " does not exist.", 404);
         }
-        entityManager.remove(entity);
+        entity.delete();
         return Response.status(204).build();
     }
 

@@ -1,26 +1,18 @@
-package com.balcia.ws.fruit;
+package com.balcia.ws.color;
 
-import com.balcia.ws.color.Color;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
-import javax.persistence.Cacheable;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "known_fruits")
-@Cacheable
-public class Fruit extends PanacheEntityBase {
-
+@Table(name = "color")
+public class Color extends PanacheEntityBase {
     @Id
     @SequenceGenerator(
             name = "personSequence",
@@ -30,8 +22,4 @@ public class Fruit extends PanacheEntityBase {
 
     @Column(length = 40, unique = true)
     public String name;
-
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name="color_id")
-    public Color color;
 }
