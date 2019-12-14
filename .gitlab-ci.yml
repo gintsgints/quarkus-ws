@@ -1,6 +1,7 @@
 stages:
   - test
   - build
+  - package
   - deploy
 
 test:
@@ -29,6 +30,17 @@ test:
 
 build:
   stage: build
+  image: openjdk:8u222
+  script:
+    - ./mvnw clean package
+  artifacts:
+    paths:
+      - target/lib/*
+      - target/*-runner.jar
+    expire_in: 1 week
+
+package:
+  stage: package
   image: docker:stable
   variables:
     DOCKER_HOST: tcp://localhost:2375
@@ -38,13 +50,13 @@ build:
       command: ["--insecure-registry=registry.balcia.com"]
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
-    - docker build -t $CI_REGISTRY_IMAGE .
+    - docker build -f src/main/docker/Dockerfile.jvm -t $CI_REGISTRY_IMAGE .
     - docker push $CI_REGISTRY_IMAGE
   except:
     - tags
 
-build:ver:
-  stage: build
+package:ver:
+  stage: package
   image: docker:stable
   variables:
     DOCKER_HOST: tcp://localhost:2375
@@ -54,7 +66,7 @@ build:ver:
       command: ["--insecure-registry=registry.balcia.com"]
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
-    - docker build -t $CI_REGISTRY_IMAGE:$CI_BUILD_TAG .
+    - docker build -f src/main/docker/Dockerfile.jvm -t $CI_REGISTRY_IMAGE:$CI_BUILD_TAG .
     - docker push $CI_REGISTRY_IMAGE:$CI_BUILD_TAG
   only:
     - tags
@@ -69,11 +81,7 @@ deploy:
     - mkdir -p /etc/deploy
     - echo ${kube_config} | base64 -d > ${KUBECONFIG}
   script:
-    - kubectl delete deployment -l io.kompose.service=server
-    - kubectl apply --namespace "$KUBE_NAMESPACE" -f ./k8s/db-deployment.yaml
-    - kubectl apply --namespace "$KUBE_NAMESPACE" -f ./k8s/db-service.yaml
-    - kubectl apply --namespace "$KUBE_NAMESPACE" -f ./k8s/server-deployment.yaml
-    - kubectl apply --namespace "$KUBE_NAMESPACE" -f ./k8s/server-service.yaml
+    - helm upgrade --install jasper-server helm/ --set db.username=$DEV_QUARKUS_DATASOURCE_USERNAME --set db.password=$DEV_QUARKUS_DATASOURCE_PASSWORD --set db.url=$DEV_QUARKUS_DATASOURCE_URL --set commit=$CI_COMMIT_SHORT_SHA --set env=$KUBE_NAMESPACE --set image.pullPolicy=Always --namespace=$KUBE_NAMESPACE
   environment:
     name: develop
     url: http://10.203.8.21:30310
