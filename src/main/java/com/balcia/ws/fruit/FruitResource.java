@@ -11,7 +11,7 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 import java.util.List;
 
-@Path("fruits")
+@Path("/fruits")
 @ApplicationScoped
 @Produces("application/json")
 @Consumes("application/json")

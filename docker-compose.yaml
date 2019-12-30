@@ -15,17 +15,23 @@ services:
       - QUARKUS_PROFILE=dev
 
   keycloak:
-    image: registry.balcia.com/balcia_dev/testing/keycloak-image
+    image: quay.io/keycloak/keycloak:7.0.1
     environment:
       - KEYCLOAK_USER=admin
       - KEYCLOAK_PASSWORD=admin_234
-      - KEYCLOAK_IMPORT=/tmp/balcia-realm.json
     ports:
-      - '8180:8080'
+      - '8280:8080'
 
+#  db:
+#    image: postgres:9.6-alpine
+#    ports:
+#      - '5432:5432'
+#    environment:
+#      - POSTGRES_PASSWORD=postgres_234
   db:
-    image: postgres:9.6-alpine
+    image: mysql:8
     ports:
-      - '5432:5432'
+      - "3306:3306"
     environment:
-      - POSTGRES_PASSWORD=postgres_234
+      - MYSQL_DATABASE=db
+      - MYSQL_ROOT_PASSWORD=root_234
