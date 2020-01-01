@@ -6,6 +6,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
+import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirements;
 import org.jboss.resteasy.annotations.cache.NoCache;
 
 import io.quarkus.security.identity.SecurityIdentity;
@@ -20,6 +22,7 @@ public class UsersResource {
     @Path("/me")
     @Produces(MediaType.APPLICATION_JSON)
     @NoCache
+    @SecurityRequirement(name = "openId")
     public User me() {
         return new User(identity);
     }
