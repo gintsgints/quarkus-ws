@@ -2,16 +2,15 @@ version: '3'
 
 services:
   server:
-    build:
-      context: .
     image: registry.balcia.com/balcia_dev/java/quarkus-ws
     ports:
-      - '8080:8080'
+      - '8180:8080'
       - '8778:8778'
       - '9779:9779'
     environment:
       - POSTGRES_PASSWORD=postgres_234
-      - QUARKUS_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
+      - MYSQL_HOST=db
+      - QUARKUS_OIDC_AUTH_SERVER_URL=http://keycloak:8080/auth/realms/quarkus
       - QUARKUS_PROFILE=dev
 
   keycloak:
@@ -20,7 +19,7 @@ services:
       - KEYCLOAK_USER=admin
       - KEYCLOAK_PASSWORD=admin_234
     ports:
-      - '8280:8080'
+      - '8080:8080'
 
 #  db:
 #    image: postgres:9.6-alpine

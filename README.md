@@ -15,6 +15,12 @@ then go http://wsexample.dev.balcia.com:30310/
 
 ## Getting started
 
+Make sure you point your environment to Java 11 JDK:
+
+```
+set JAVA_HOME=C:\Development\exec\jdk-11
+```
+
 To start development start first start database:
 
 ```shell script
@@ -25,10 +31,10 @@ If you are going to work with secured endpoints, you have to start keycloak serv
 
 ```shell script
 docker-compose up -d keycloak
-export KEYCLOAK_SERVER=localhost:8180
-# vai windows
-set KEYCLOAK_SERVER=localhost:8180
 ```
+
+After you start keycloak, login to server - http://localhost:8280/auth/ with admin/admin_234 
+and create realm from file - quarkus-realm.json
 
 then start with mvn command:
 
