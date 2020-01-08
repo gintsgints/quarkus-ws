@@ -4,7 +4,7 @@ services:
   server:
     image: registry.balcia.com/balcia_dev/java/quarkus-ws
     ports:
-      - '8180:8080'
+      - '8080:8080'
       - '8778:8778'
       - '9779:9779'
     environment:
@@ -19,7 +19,7 @@ services:
       - KEYCLOAK_USER=admin
       - KEYCLOAK_PASSWORD=admin_234
     ports:
-      - '8080:8080'
+      - '8280:8080'
 
 #  db:
 #    image: postgres:9.6-alpine
